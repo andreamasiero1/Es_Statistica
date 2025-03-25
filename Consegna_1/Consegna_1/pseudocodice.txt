@@ -1,0 +1,28 @@
+PSEUDOCODICE
+
+
+1. Minimi: ritorna a e b valori minimi
+   - Calcola la media di x e y
+   - Calcola la covarianza tra x e y
+   - Calcola la varianza di x
+   - Calcola a = covarianza/varianza
+   - Calcola b = media di y - a per la media di x
+   
+2. Ciclo sui due campioni bi-variati
+   - Per ogni coppia di colonne (col_x, col_y):
+     - Estrai i dati e salvali negli array x e y
+     - Calcola a e b usando la funzione minimi
+     - Plot del grafico
+
+3. Estrai i dati delle colonne (Tmin, Tmed, Tmax, Ptot) per il campione quattro-variato
+   - np.cov calcola la matrice di covarianza
+   
+4. Esegui l'auto-decomposizione della matrice di covarianza
+   - Calcola gli autovalori e gli autovettori della matrice di covarianza
+   - Ordina gli autovalori in ordine decrescente
+   - Seleziona i due autovettori principali => componenti principali
+
+5. Trasforma i dati originali nelle prime due direzioni principali
+   - Proietta i dati sulla matrice degli autovettori principali
+
+6. Crea il grafico di dispersione delle prime due componenti principali
