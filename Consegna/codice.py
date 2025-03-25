@@ -66,6 +66,23 @@ idx = np.argsort(autovalori)[::-1]  # Indici degli autovalori ordinati in senso 
 autovalori_ordinati = autovalori[idx]
 autovettori_ordinati = autovettori[:, idx]
 
+# Matrice di covarianza
+cov_matrix = np.cov(campione, rowvar=False)
+
+# Autovalori e autovettori
+autovalori, autovettori = np.linalg.eig(cov_matrix)
+idx = np.argsort(autovalori)[::-1]  
+autovalori_ordinati = autovalori[idx]
+autovettori_ordinati = autovettori[:, idx]
+
+# Aggiunta per stampare le matrici
+print("Matrice diagonale degli autovalori ordinati:")
+print(np.diag(autovalori_ordinati))
+print("\nMatrice ortonormale degli autovettori ordinati:")
+print(autovettori_ordinati)
+
+# Autovettori principali => componenti principali
+autovettori_principali = autovettori_ordinati[:, :2]
 # Autovettori principali => componenti principali
 autovettori_principali = autovettori_ordinati[:, :2]
 
