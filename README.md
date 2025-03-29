@@ -5,4 +5,7 @@
 * Andrea Masiero 2118057
 
 ## Foglio 1 Esercizio 15
-I file richiesti si trovano all'interno della cartella "Consegna -> Consegna1.zip"
+All'interno della cartella 1
+
+## Foglio 2 Esercizio 15
+All'interno della cartella 2
