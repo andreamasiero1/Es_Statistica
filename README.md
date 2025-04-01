@@ -7,5 +7,5 @@
 ## Foglio 1 Esercizio 15
 All'interno della cartella 1
 
-## Foglio 2 Esercizio 15
+## Foglio 2 Esercizio 14-15
 All'interno della cartella 2
