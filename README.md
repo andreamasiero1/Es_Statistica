@@ -9,3 +9,6 @@ All'interno della cartella 1
 
 ## Foglio 2 Esercizio 14-15
 All'interno della cartella 2
+
+## Foglio 3 Esercizio 12
+All'interno della cartella 3
