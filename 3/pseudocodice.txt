@@ -1,0 +1,138 @@
+
+
+FUNZIONE simula_partita()
+    // Inizializza array posizioni (pos[k] = riga attuale della pedina nella colonna k)
+    pos ← array di 13 elementi inizializzati a 0
+    mosse ← 0
+    
+    RIPETI
+        mosse ← mosse + 1
+        // Lancia due dadi e calcola la somma
+        dado1 ← numero casuale intero tra 1 e 6
+        dado2 ← numero casuale intero tra 1 e 6
+        somma ← dado1 + dado2
+        
+        SE 1 ≤ somma ≤ 12 ALLORA
+            // Avanza la pedina nella colonna corrispondente alla somma dei dadi
+            pos[somma] ← pos[somma] + 1
+            
+            // Controlla se questa colonna ha raggiunto o superato la riga 19
+            SE pos[somma] ≥ 19 ALLORA
+                RITORNA somma, mosse  // Ritorna la colonna vincente e il numero di mosse
+            FINE SE
+        FINE SE
+    FINE RIPETI
+
+
+
+PROCEDURA main()
+    // Imposta un seme per garantire riproducibilità
+    imposta_seme_casuale(42)
+    
+    //---- a) Calcolo probabilità che colonna 7 vinca prima della colonna 8 ----//
+    simulazioni_7_vs_8 ← 100000
+    vittorie_7 ← 0
+    
+    PER i DA 1 A simulazioni_7_vs_8 ESEGUI
+        pos ← array di 13 elementi inizializzati a 0
+        
+        // Continua la simulazione finché né la colonna 7 né la 8 hanno vinto
+        MENTRE pos[7] < 19 E pos[8] < 19 ESEGUI
+            somma ← numero casuale intero tra 1 e 6 + numero casuale intero tra 1 e 6
+            
+            SE 1 ≤ somma ≤ 12 ALLORA
+                pos[somma] ← pos[somma] + 1
+            FINE SE
+        FINE MENTRE
+        
+        // Verifica se la colonna 7 ha vinto prima della colonna 8
+        SE pos[7] ≥ 19 E pos[8] < 19 ALLORA
+            vittorie_7 ← vittorie_7 + 1
+        FINE SE
+    FINE PER
+    
+    prob_7_prima_di_8 ← vittorie_7 / simulazioni_7_vs_8
+    STAMPA "a) P(Colonna 7 vince prima di colonna 8) = ", prob_7_prima_di_8
+    
+    //---- b) Calcolo probabilità che ciascuna colonna k vinca ----//
+    simulazioni ← 100000
+    win_count ← array di 13 elementi inizializzati a 0
+    durate ← lista vuota
+    
+    // Esegui tutte le simulazioni
+    PER i DA 1 A simulazioni ESEGUI
+        vincitore, N ← simula_partita()
+        win_count[vincitore] ← win_count[vincitore] + 1
+        aggiungi N a durate
+    FINE PER
+    
+    // Calcola probabilità di vittoria per colonna k
+    PER k DA 0 A 12 ESEGUI
+        prob_vittoria[k] ← win_count[k] / simulazioni
+    FINE PER
+    
+    //---- c) Calcolo probabilità che il gioco duri esattamente N mosse ----//
+    freq_T ← dizionario vuoto
+    
+    // Conteggia le frequenze delle durate
+    PER ogni N in durate ESEGUI
+        SE N non è in freq_T ALLORA
+            freq_T[N] ← 1
+        ALTRIMENTI
+            freq_T[N] ← freq_T[N] + 1
+        FINE SE
+    FINE PER
+    
+    // Calcola le probabilità per ogni durata N
+    PER N DA 1 A 200 ESEGUI
+        SE N è in freq_T ALLORA
+            prob_T[N] ← freq_T[N] / simulazioni
+        ALTRIMENTI
+            prob_T[N] ← 0
+        FINE SE
+    FINE PER
+    
+    //---- d) Il gioco ha durata di più di 100 mosse ----//
+    prob_più_di_100 ← 0
+    PER N DA 101 A massimo(durate) ESEGUI
+        SE N è in freq_T ALLORA
+            prob_più_di_100 ← prob_più_di_100 + freq_T[N]
+        FINE SE
+    FINE PER
+    prob_più_di_100 ← prob_più_di_100 / simulazioni
+    
+    //---- e) Il gioco ha durata di più di 200 mosse ----//
+    prob_più_di_200 ← 0
+    PER N DA 201 A massimo(durate) ESEGUI
+        SE N è in freq_T ALLORA
+            prob_più_di_200 ← prob_più_di_200 + freq_T[N]
+        FINE SE
+    FINE PER
+    prob_più_di_200 ← prob_più_di_200 / simulazioni
+    
+    // Calcola la durata media del gioco
+    durata_media ← somma(durate) / lunghezza(durate)
+    
+    // Stampa i risultati
+    STAMPA "Risultati basati su ", simulazioni, " simulazioni:"
+    
+    STAMPA "b) Probabilità di vittoria delle colonne k=1..12:"
+    PER k DA 1 A 12 ESEGUI
+        STAMPA "P(Colonna ", k, " vince) = ", prob_vittoria[k]
+    FINE PER
+    
+    STAMPA "c) Probabilità che una partita duri esattamente N mosse:"
+    PER N DA 1 A 200 ESEGUI
+        STAMPA "P(T=", N, ") = ", prob_T[N]
+    FINE PER
+    
+    STAMPA "d) P(durata > 100 mosse) = ", prob_più_di_100
+    STAMPA "e) P(durata > 200 mosse) = ", prob_più_di_200
+    STAMPA "Durata media del gioco: ", durata_media, " mosse"
+    
+    //Grafici
+    // Grafico della probabilità di vittoria per colonna k
+    // Grafico della probabilità di durata esatta N mosse
+
+// Avvio del programma principale
+main()
