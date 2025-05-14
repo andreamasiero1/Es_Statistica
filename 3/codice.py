@@ -20,15 +20,36 @@ def main():
     # Imposta il seme per la riproducibilità dei risultati
     random.seed(42)
     
+    # a)Calcolare la probabilità che la colonna 7 vinca prima della colonna 8
+    # => simulazione specifica
+    simulazioni_7_vs_8 = 100000
+    vittorie_7 = 0
+    
+    for _ in range(simulazioni_7_vs_8):
+        pos = [0] * 13
+        while pos[7] < 19 and pos[8] < 19:  # Continua finché né 7 né 8 hanno vinto
+            s = random.randint(1, 6) + random.randint(1, 6)
+            if 1 <= s <= 12:
+                pos[s] += 1
+        
+        # Se 7 ha vinto (raggiunto o superato riga 19) e 8 non ha vinto
+        if pos[7] >= 19 and pos[8] < 19:
+            vittorie_7 += 1
+    
+    prob_7_prima_di_8 = vittorie_7 / simulazioni_7_vs_8
+    print(f"\na) P(Colonna 7 vince prima di colonna 8) = {prob_7_prima_di_8:.6f}\n\n")
+    
+    
+    #Altri punti della traccia: ciclo sulle partite
     # Numero di simulazioni
-    simulazioni = 1000000
-    win_count = [0]*13
-    durate = []
+    simulazioni = 100000
+    win_count = [0]*13 #ignoriamo la prima colonna
+    durate = [] #memorizziamo le durate delle partite
     
     # Esegui tutte le simulazioni
     for _ in range(simulazioni):
         vincitore, N = simula_partita()
-        win_count[vincitore] += 1
+        win_count[vincitore] += 1 #aumentiamo il win count della colonna vincente
         durate.append(N)
 
     # Calcola probabilità di vittoria per colonna k
@@ -81,6 +102,7 @@ def main():
     plt.title('Probabilità che il gioco abbia durata di esattamente N mosse')
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.savefig('prob_durata_N_mosse.pdf')
+    
     
     
 if __name__ == "__main__":
