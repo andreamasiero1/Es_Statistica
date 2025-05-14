@@ -46,7 +46,7 @@ def main():
     win_count = [0]*13 #ignoriamo la prima colonna
     durate = [] #memorizziamo le durate delle partite
     
-    # Esegui tutte le simulazioni
+    # b) Esegui tutte le simulazioni
     for _ in range(simulazioni):
         vincitore, N = simula_partita()
         win_count[vincitore] += 1 #aumentiamo il win count della colonna vincente
@@ -55,13 +55,12 @@ def main():
     # Calcola probabilità di vittoria per colonna k
     prob_vittoria = [win_count[k]/simulazioni for k in range(13)]
 
-    # Calcola P(T=N) per N fino a 200 (conteggio frequenze)
+    # c) Calcola P(T=N) per N fino a 200 
     freq_T = {}
     for N in durate:
         freq_T[N] = freq_T.get(N, 0) + 1
     prob_T = {N: freq_T.get(N, 0)/simulazioni for N in range(1, 201)}
 
-    
     # d) Il gioco ha durata di più di 100 mosse
     prob_più_di_100 = sum(freq_T.get(N, 0) for N in range(101, max(durate) + 1)) / simulazioni
     
@@ -73,9 +72,13 @@ def main():
     
     # Stampa i risultati
     print("Risultati basati su", simulazioni, "simulazioni:")
-    print("\nProbabilità di vittoria delle colonne k=1..12:")
+    print("\nb) Probabilità di vittoria delle colonne k=1..12:")
     for k in range(1, 13):
         print(f"P(Colonna {k} vince) = {prob_vittoria[k]:.6f}")
+        
+    print("\nc) Probabilità che una partita duri esattamente N mosse:")
+    for N in range(1, 201):
+        print(f"P(T={N}) = {prob_T[N]:.6f}")
     
     print(f"\nd) P(durata > 100 mosse) = {prob_più_di_100:.6f}")
     print(f"e) P(durata > 200 mosse) = {prob_più_di_200:.6f}")
