@@ -1,4 +1,6 @@
 import random
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Simula una singola partita
 def simula_partita():
@@ -8,31 +10,78 @@ def simula_partita():
         mosse += 1
         # Lancia due dadi
         s = random.randint(1,6) + random.randint(1,6)
-        if 1 <= s <= 12:
+        if 1 <= s <= 12:  # Controllo che s sia nel range valido (in realtà sempre vero con due dadi)
             pos[s] += 1  # la pedina in colonna s avanza
-        # Controlla se questa colonna ha raggiunto la riga 19 (19 avanzamenti)
-        if pos[s] >= 19:
-            return s, mosse  # ritorna colonna vincente e numero di mosse
+            # Controlla se questa colonna ha raggiunto la riga 19 (19 avanzamenti)
+            if pos[s] >= 19:
+                return s, mosse  # ritorna colonna vincente e numero di mosse
 
-# Esempio: 10000 simulazioni per stimare P(colonna k vince) e distribuzione durate
-simulazioni = 100000
-win_count = [0]*13
-durate = []
-for _ in range(simulazioni):
-    vincitore, N = simula_partita()
-    win_count[vincitore] += 1
-    durate.append(N)
+def main():
+    # Imposta il seme per la riproducibilità dei risultati
+    random.seed(42)
+    
+    # Numero di simulazioni
+    simulazioni = 1000000
+    win_count = [0]*13
+    durate = []
+    
+    # Esegui tutte le simulazioni
+    for _ in range(simulazioni):
+        vincitore, N = simula_partita()
+        win_count[vincitore] += 1
+        durate.append(N)
 
-# Calcola probabilità di vittoria per colonna k
-prob_vittoria = [win_count[k]/simulazioni for k in range(13)]
+    # Calcola probabilità di vittoria per colonna k
+    prob_vittoria = [win_count[k]/simulazioni for k in range(13)]
 
-# Calcola P(T=N) per N fino a 200 (conteggio frequenze)
-freq_T = {}
-for N in durate:
-    if N <= 200:
-        freq_T[N] = freq_T.get(N,0) + 1
-prob_T = {N: freq_T.get(N, 0)/simulazioni for N in range(1, 201)}
+    # Calcola P(T=N) per N fino a 200 (conteggio frequenze)
+    freq_T = {}
+    for N in durate:
+        freq_T[N] = freq_T.get(N, 0) + 1
+    prob_T = {N: freq_T.get(N, 0)/simulazioni for N in range(1, 201)}
 
-# Esempio di risultati stampati (troncati)
-print("Prob vittoria colonne k=1..12:\n", prob_vittoria[1:13])
-print("Durata media:", sum(durate)/len(durate))
+    
+    # d) Il gioco ha durata di più di 100 mosse
+    prob_più_di_100 = sum(freq_T.get(N, 0) for N in range(101, max(durate) + 1)) / simulazioni
+    
+    # e) Il gioco ha durata di più di 200 mosse
+    prob_più_di_200 = sum(freq_T.get(N, 0) for N in range(201, max(durate) + 1)) / simulazioni
+    
+    # Calcola la durata media del gioco
+    durata_media = sum(durate) / len(durate)
+    
+    # Stampa i risultati
+    print("Risultati basati su", simulazioni, "simulazioni:")
+    print("\nProbabilità di vittoria delle colonne k=1..12:")
+    for k in range(1, 13):
+        print(f"P(Colonna {k} vince) = {prob_vittoria[k]:.6f}")
+    
+    print(f"\nd) P(durata > 100 mosse) = {prob_più_di_100:.6f}")
+    print(f"e) P(durata > 200 mosse) = {prob_più_di_200:.6f}")
+    print(f"\nDurata media del gioco: {durata_media:.2f} mosse")
+    
+    # Grafico della probabilità di vittoria per colonna k
+    plt.figure(figsize=(10, 6))
+    colonne = list(range(1, 13))
+    plt.bar(colonne, prob_vittoria[1:13], color='steelblue')
+    plt.xlabel('Colonna k')
+    plt.ylabel('Probabilità di vittoria')
+    plt.title('Probabilità che la pedina in colonna k arrivi per prima')
+    plt.xticks(colonne)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.savefig('prob_vittoria_colonne.pdf')
+    
+    # Grafico della probabilità di durata esatta N mosse
+    plt.figure(figsize=(12, 6))
+    N_values = list(range(1, 201))
+    prob_values = [prob_T[N] for N in N_values]
+    plt.plot(N_values, prob_values, color='darkred', linewidth=1.5)
+    plt.xlabel('Numero di mosse N')
+    plt.ylabel('Probabilità')
+    plt.title('Probabilità che il gioco abbia durata di esattamente N mosse')
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.savefig('prob_durata_N_mosse.pdf')
+    
+    
+if __name__ == "__main__":
+    main()
