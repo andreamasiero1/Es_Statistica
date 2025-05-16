@@ -85,26 +85,26 @@ def main():
     print(f"\nDurata media del gioco: {durata_media:.2f} mosse")
     
     # Grafico della probabilità di vittoria per colonna k
-    plt.figure(figsize=(10, 6))
-    colonne = list(range(1, 13))
-    plt.bar(colonne, prob_vittoria[1:13], color='steelblue')
-    plt.xlabel('Colonna k')
-    plt.ylabel('Probabilità di vittoria')
-    plt.title('Probabilità che la pedina in colonna k arrivi per prima')
-    plt.xticks(colonne)
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-    plt.savefig('prob_vittoria_colonne.pdf')
+    #plt.figure(figsize=(10, 6))
+    #colonne = list(range(1, 13))
+    #plt.bar(colonne, prob_vittoria[1:13], color='steelblue')
+    #plt.xlabel('Colonna k')
+    #plt.ylabel('Probabilità di vittoria')
+    #plt.title('Probabilità che la pedina in colonna k arrivi per prima')
+    #plt.xticks(colonne)
+    #plt.grid(axis='y', linestyle='--', alpha=0.7)
+    #plt.savefig('prob_vittoria_colonne.pdf')
     
     # Grafico della probabilità di durata esatta N mosse
-    plt.figure(figsize=(12, 6))
-    N_values = list(range(1, 201))
-    prob_values = [prob_T[N] for N in N_values]
-    plt.plot(N_values, prob_values, color='darkred', linewidth=1.5)
-    plt.xlabel('Numero di mosse N')
-    plt.ylabel('Probabilità')
-    plt.title('Probabilità che il gioco abbia durata di esattamente N mosse')
-    plt.grid(True, linestyle='--', alpha=0.7)
-    plt.savefig('prob_durata_N_mosse.pdf')
+    #plt.figure(figsize=(12, 6))
+    #N_values = list(range(1, 201))
+    #prob_values = [prob_T[N] for N in N_values]
+    #plt.plot(N_values, prob_values, color='darkred', linewidth=1.5)
+    #plt.xlabel('Numero di mosse N')
+    #plt.ylabel('Probabilità')
+    #plt.title('Probabilità che il gioco abbia durata di esattamente N mosse')
+    #plt.grid(True, linestyle='--', alpha=0.7)
+    #plt.savefig('prob_durata_N_mosse.pdf')
     
     
     

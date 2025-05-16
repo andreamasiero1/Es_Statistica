@@ -1,24 +1,24 @@
 PSEUDOCODICE
 
 1. Inizializzazione
-   - Imposta total = 1.000.000 che è il numero totale di elettori
-   - Crea un array M_values contenente i valori di M da 0 a 5000 con passo 10
-   - Crea una lista vuota probabilities per salvare le probabilità calcolate
+   - Imposta il numero totale di elettori N_M_totale
+   - Crea un array M contenente i valori di M da 0 a 5000 con passo 10
+   - Crea una lista vuota probabilità per salvare le probabilità calcolate
 
 2. Ciclo sui valori di M
-   - Per ogni valore M in M_values:
-     - Calcola il numero di elettori indecisi: N = total − M 
-     - Calcola la soglia minima di voti degli indecisi richiesti per far vincere A: threshold = floor((N − M) / 2) + 1
-     - Calcola la media della distribuzione binomiale degli indecisi: mu = N * 0.5
-     - Calcola la deviazione standard della distribuzione binomiale: sigma = sqrt(N * 0.25)
-     - Applica la correzione di continuità calcolando z = (threshold − 0.5 − mu) / sigma
-     - Calcola la probabilità che almeno threshold indecisi votino per A: prob = 1 − CDF_normale(z)
-     - Aggiunge prob alla lista probabilities
-     - Stampa "M = [M], Probabilità di vittoria di A = [prob]"
+   - Per ogni valore M_corrente in M:
+     - Calcola il numero di elettori indecisi N
+     - Calcola la soglia minima di voti degli indecisi richiesti per far vincere A
+     - Calcola la media della distribuzione binomiale degli indecisi
+     - Calcola la deviazione standard della distribuzione binomiale
+     - Applica la correzione di continuità calcolando z
+     - Calcola la probabilità_vittoria corrispondente alla probabilità che almeno soglia indecisi votino per A
+     - Aggiunge probabilità_vittoria alla lista probabilità
+     - Stampa il numero di sostenitori, il numero di indecisi e la probabilità di vittoria di A
 
 3. Visualizzazione dei risultati
    - Crea un grafico in questo modo:
-       - Asse x: M_values (numero di sostenitori di A iniziali)
-       - Asse y: probabilities (probabilità di vittoria di A)
+       - Asse x: M
+       - Asse y: probabilità
    - Aggiungi etichette e titolo al grafico
    - Visualizza il grafico

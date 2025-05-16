@@ -6,7 +6,7 @@ from scipy.stats import norm
 N_M_totale = int(1e6)
 
 # Valori di M (numero di sostenitori di A) da 0 a 5000 con passo 10
-M = np.arange(0, 5001, 10)  # M = numero di sostenitori di A
+M = np.arange(0, 5000, 10)  # M = numero di sostenitori di A
 
 # Lista per memorizzare le probabilità calcolate
 probabilità = []
@@ -17,15 +17,14 @@ for M_corrente in M:
     N = N_M_totale - M_corrente
     
     # Calcolo della soglia: numero minimo di voti dagli indecisi che servono ad A per vincere
-    soglia = (N - M_corrente) // 2 + 1  # t_start
+    soglia = (N - M_corrente) // 2 + 1  # inizio soglia per somma delle probabilità
+
     
-    # Approssimiamo la distribuzione binomiale (successi tra gli indecisi) con una normale
-    # perché N è molto grande. 
-    # (Abbiamo scoperto che è un procedimento che spesso si fa in statistica per semplificare i calcoli).
+    # Approssimiamo la distribuzione binomiale (successi tra gli indecisi) con una normale perché N è molto grande. 
     media = N * 0.5  # Valore atteso di successi (probabilità 0.5 per ogni indeciso)
     deviazione_std = np.sqrt(N * 0.25)  # Deviazione standard della binomiale
     
-    # Calcoliamo lo z-score: quante deviazioni standard la soglia è distante dalla media
+    # Calcoliamo il valore z: quante deviazioni standard la soglia è distante dalla media
     # Usiamo la correzione di continuità (-0.5) perché la binomiale è discreta e la normale è continua
     z = (soglia - 0.5 - media) / deviazione_std
     
